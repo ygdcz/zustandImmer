@@ -1,68 +1,22 @@
-import create from "zustand";
-import produce from "immer";
-
-type State = {
-  deep: {
-    nested: {
-      obj: { count: number };
-      arr: string[];
-    };
-  };
-  immerInc: () => void;
-  immerSetText: (s: string, i: number) => void;
-};
-
-const useStore = create<State>((set) => ({
-  deep: {
-    nested: {
-      obj: { count: 0 },
-      arr: ["hello"]
-    }
-  },
-  immerInc: () =>
-    set(
-      produce((state: State) => {
-        ++state.deep.nested.obj.count;
-      })
-    ),
-  immerSetText: (s: string, i: number) =>
-    set(
-      produce((state: State) => {
-        state.deep.nested.arr[i] = s;
-      })
-    ),
-}));
-
-const baseState = [
-  {
-      title: "Learn TypeScript",
-      done: true
-  },
-  {
-      title: "Try Immer",
-      done: false
-  }
-]
-const newState = produce(baseState, draft => {
-  draft[0].done = false;
-});
-console.log(Object.is(baseState, newState), baseState, newState)
+import useStore from "./store/useStore";
 
 const App = () => {
-  const state = useStore();
+  const fishes = useStore((state) => state.fishes);
+  const eatFish = useStore((state) => state.eatFish);
+  const repopulate = useStore((state) => state.repopulate);
+
   return (
-    <div>
-      <h3>Immer</h3>
-      <div>
-        {state.deep.nested.obj.count}
-        <button onClick={state.immerInc}>+1</button>
-        <input
-          value={state.deep.nested.arr[0]}
-          onChange={(e) => state.immerSetText(e.target.value, 0)}
-        />
-      </div>
+    <div className="Mountain">
+      <p>Fishes : {fishes}</p>
+      <p>
+        <button onClick={eatFish}>Eat</button>
+      </p>
+      <p>
+        <button onClick={repopulate}>Repopulate</button>
+      </p>
     </div>
   );
-};
+}
+
 
 export default App;
