@@ -1,9 +1,12 @@
 import useStore from "./store/useStore";
+import shallow from 'zustand/shallow'
 
 const App = () => {
-  const fishes = useStore((state) => state.fishes);
-  const eatFish = useStore((state) => state.eatFish);
-  const repopulate = useStore((state) => state.repopulate);
+  const {fishes, eatFish, repopulate} =  useStore((state) => ({
+    fishes: state.fishes,
+    eatFish: state.eatFish,
+    repopulate: state.repopulate
+  }), shallow)
 
   return (
     <div className="Mountain">

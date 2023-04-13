@@ -1,5 +1,6 @@
+import {produce} from "immer";
 import { GetState, SetState } from "zustand";
-import { MyState } from "./useStore";
+import { Store } from "./useStore";
 
 export interface FishSlice {
   fishes: number;
@@ -8,10 +9,12 @@ export interface FishSlice {
 
 const maxFishes = 10;
 
-const createFishSlice = (set: SetState<MyState>, get: GetState<MyState>) => ({
+const createFishSlice = (set: SetState<Store>, get: GetState<Store>) => ({
   fishes: maxFishes,
   repopulate: () => {
-    set((prev) => ({ fishes: maxFishes }));
+    set(produce((state: Store) => {
+        state.fishes = maxFishes;
+    }))
   }
 });
 

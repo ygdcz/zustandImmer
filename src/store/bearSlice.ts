@@ -1,13 +1,16 @@
+import produce from "immer";
 import { GetState, SetState } from "zustand";
-import { MyState } from "./useStore";
+import { Store } from "./useStore";
 
 export interface BearSlice {
   eatFish: () => void;
 }
 
-const createBearSlice = (set: SetState<MyState>, get: GetState<MyState>) => ({
+const createBearSlice = (set: SetState<Store>, get: GetState<Store>) => ({
   eatFish: () => {
-    set((prev) => ({ fishes: prev.fishes > 1 ? prev.fishes - 1 : 0 }));
+    set(produce((state: Store) => {
+        state.fishes > 0 ? state.fishes-- : 0;
+    }));
   }
 });
 
