@@ -1,22 +1,26 @@
-import { persist, StoreApiWithPersist } from "zustand/middleware";
-import create, {GetState, SetState} from "zustand";
+import { persist, devtools } from "zustand/middleware";
+import {create} from "zustand";
 
-import createBearSlice, { BearSlice } from "./bearSlice";
-import createFishSlice, { FishSlice } from "./fishSlice";
+import createBearSlice, { BearState } from "./bearSlice";
+import createFishSlice, { FishState } from "./fishSlice";
 
-export type Store = BearSlice & FishSlice;
+export type State = BearState & FishState;
 
-const useStore = create<Store, SetState<Store>, GetState<Store>, StoreApiWithPersist<Store>>(
-  persist(
-    (set, get) => ({
-      ...createBearSlice(set, get),
-      ...createFishSlice(set, get)
-    }),
-    {
-      name: "location-storage",
-      getStorage: () => sessionStorage
-    }
-  )
+const useStore = create<
+  State,
+  [
+    ['zustand/devtools', never],
+    ['zustand/persist', State]
+  ]
+>(
+  devtools(persist((...a) => ({
+    ...createBearSlice(...a),
+    ...createFishSlice(...a)
+  }),
+  {
+    name: "location-storage",
+    getStorage: () => sessionStorage
+  }))
 );
 
 

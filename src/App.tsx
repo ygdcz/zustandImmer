@@ -1,12 +1,11 @@
-import useStore from "./store/useStore";
-import shallow from 'zustand/shallow'
+import useStore, {State} from "./store/useStore";
 
 const App = () => {
-  const {fishes, eatFish, repopulate} =  useStore((state) => ({
+  const {fishes, eatFish, repopulate} =  useStore((state: State) => ({
     fishes: state.fishes,
     eatFish: state.eatFish,
     repopulate: state.repopulate
-  }), shallow)
+  }))
 
   return (
     <div className="Mountain">

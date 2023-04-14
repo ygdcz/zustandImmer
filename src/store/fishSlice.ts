@@ -1,21 +1,26 @@
 import {produce} from "immer";
-import { GetState, SetState } from "zustand";
-import { Store } from "./useStore";
+import {StateCreator} from "zustand";
+import {State} from "./useStore";
 
-export interface FishSlice {
+export interface FishState {
   fishes: number;
   repopulate: () => void;
 }
 
 const maxFishes = 10;
 
-const createFishSlice = (set: SetState<Store>, get: GetState<Store>) => ({
-  fishes: maxFishes,
-  repopulate: () => {
-    set(produce((state: Store) => {
-        state.fishes = maxFishes;
-    }))
-  }
-});
+const useFishStore: StateCreator<
+    State,
+    [],
+    [],
+    FishState
+> = (set) => ({
+    fishes: maxFishes,
+    repopulate: () => {
+      set(produce((state: State) => {
+          state.fishes = maxFishes;
+      }))
+    }
+})
 
-export default createFishSlice;
+export default useFishStore;
